@@ -1,0 +1,408 @@
+/* ==========================================================================
+   Pinterest-inspired Streamlit theme
+   Soft, inviting journaling UI
+   ========================================================================== */
+
+:root {
+  /* Color palette */
+  --color-primary: #ffe5e5;    /* soft pink */
+  --color-secondary: #e5f3ff;  /* soft blue */
+  --color-accent: #fff5e5;     /* soft yellow */
+  --color-success: #e5ffe5;    /* soft green */
+  --color-bg: #fafafa;         /* very light gray */
+  --color-text: #2c3e50;       /* dark slate */
+  --color-card-bg: #ffffff;
+
+  --color-neutral: #f5f5f5;
+  --color-border-subtle: rgba(44, 62, 80, 0.08);
+
+  /* Emotion colors */
+  --emotion-happy: #ffe5e5;
+  --emotion-sad: #e5f3ff;
+  --emotion-anxious: #fff5e5;
+  --emotion-calm: #e5ffe5;
+  --emotion-angry: #ffe5f0;
+  --emotion-neutral: #f5f5f5;
+
+  /* Typography */
+  --font-heading: "Playfair Display", "Georgia", "Times New Roman", serif;
+  --font-body: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --font-journal: "Crimson Text", "Georgia", serif;
+
+  /* Radii, shadows, transitions */
+  --radius-card: 12px;
+  --radius-pill: 999px;
+  --shadow-subtle: 0 8px 24px rgba(15, 23, 42, 0.08);
+  --shadow-soft: 0 14px 45px rgba(15, 23, 42, 0.12);
+  --transition-fast: 150ms ease-out;
+  --transition-default: 220ms ease;
+}
+
+/* Global layout & background ------------------------------------------------ */
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  font-family: var(--font-body);
+  color: var(--color-text);
+  background: radial-gradient(circle at top left, #fff7f7 0, var(--color-bg) 40%, #f7fbff 100%);
+}
+
+.stApp {
+  background: transparent !important;
+}
+
+.main {
+  padding-top: 1rem;
+}
+
+/* Typography ---------------------------------------------------------------- */
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: var(--font-heading);
+  color: var(--color-text);
+  letter-spacing: 0.02em;
+}
+
+h1 {
+  font-weight: 700;
+}
+
+h2,
+h3 {
+  font-weight: 600;
+}
+
+p,
+span,
+label,
+div {
+  font-family: var(--font-body);
+}
+
+.journal-text {
+  font-family: var(--font-journal);
+  line-height: 1.7;
+  font-size: 1rem;
+}
+
+/* Streamlit chrome clean-up ------------------------------------------------- */
+
+/* Hide hamburger menu */
+[data-testid="collapsedControl"],
+[data-testid="stToolbar"] {
+  display: none !important;
+}
+
+/* Hide “Made with Streamlit” */
+footer,
+[data-testid="stStatusWidget"] {
+  visibility: hidden !important;
+  height: 0 !important;
+  padding: 0 !important;
+  margin: 0 !important;
+}
+
+/* Cards / Pinterest masonry feel ------------------------------------------- */
+
+.journal-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  grid-gap: 1.5rem;
+  align-items: flex-start;
+}
+
+.journal-card {
+  position: relative;
+  background: var(--color-card-bg);
+  border-radius: var(--radius-card);
+  box-shadow: var(--shadow-subtle);
+  padding: 20px;
+  overflow: hidden;
+  border: 1px solid var(--color-border-subtle);
+  transform: translateY(0);
+  transition:
+    transform var(--transition-default),
+    box-shadow var(--transition-default),
+    border-color var(--transition-fast),
+    background-color var(--transition-fast);
+  animation: card-fade-in 400ms ease-out both;
+}
+
+.journal-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-soft);
+  border-color: rgba(44, 62, 80, 0.12);
+}
+
+/* Date badge */
+.journal-card-date {
+  position: absolute;
+  top: 14px;
+  right: 16px;
+  background: rgba(255, 255, 255, 0.9);
+  border-radius: 999px;
+  padding: 4px 10px;
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: rgba(44, 62, 80, 0.7);
+  box-shadow: 0 4px 12px rgba(15, 23, 42, 0.08);
+}
+
+/* Mood indicator left border */
+.journal-card-mood-strip {
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 4px;
+  border-radius: 4px 0 0 4px;
+}
+
+.journal-card-mood-happy {
+  background: var(--emotion-happy);
+}
+.journal-card-mood-sad {
+  background: var(--emotion-sad);
+}
+.journal-card-mood-anxious {
+  background: var(--emotion-anxious);
+}
+.journal-card-mood-calm {
+  background: var(--emotion-calm);
+}
+.journal-card-mood-angry {
+  background: var(--emotion-angry);
+}
+.journal-card-mood-neutral {
+  background: var(--emotion-neutral);
+}
+
+.journal-card-title {
+  font-family: var(--font-heading);
+  font-size: 1.1rem;
+  margin-bottom: 0.25rem;
+}
+
+.journal-card-meta {
+  font-size: 0.8rem;
+  color: rgba(44, 62, 80, 0.65);
+  margin-bottom: 0.8rem;
+}
+
+.journal-card-content {
+  font-family: var(--font-journal);
+  font-size: 0.95rem;
+  line-height: 1.65;
+  position: relative;
+  max-height: 8rem; /* preview height */
+  overflow: hidden;
+}
+
+.journal-card-content::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 3rem;
+  background: linear-gradient(
+    to bottom,
+    rgba(255, 255, 255, 0),
+    rgba(250, 250, 250, 0.94)
+  );
+}
+
+.journal-card-actions {
+  margin-top: 0.8rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+/* Mood badges -------------------------------------------------------------- */
+
+.mood-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: #34495e;
+  background: linear-gradient(135deg, #ffffff, #f8fafc);
+  box-shadow: 0 4px 12px rgba(15, 23, 42, 0.08);
+  gap: 6px;
+  transition:
+    transform var(--transition-fast),
+    box-shadow var(--transition-fast),
+    background var(--transition-fast);
+}
+
+.mood-badge-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 999px;
+  box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.9);
+}
+
+.mood-badge--happy .mood-badge-dot {
+  background: radial-gradient(circle at 30% 30%, #fff, var(--emotion-happy));
+}
+.mood-badge--sad .mood-badge-dot {
+  background: radial-gradient(circle at 30% 30%, #fff, var(--emotion-sad));
+}
+.mood-badge--anxious .mood-badge-dot {
+  background: radial-gradient(circle at 30% 30%, #fff, var(--emotion-anxious));
+}
+.mood-badge--calm .mood-badge-dot {
+  background: radial-gradient(circle at 30% 30%, #fff, var(--emotion-calm));
+}
+.mood-badge--angry .mood-badge-dot {
+  background: radial-gradient(circle at 30% 30%, #fff, var(--emotion-angry));
+}
+.mood-badge--neutral .mood-badge-dot {
+  background: radial-gradient(circle at 30% 30%, #fff, var(--emotion-neutral));
+}
+
+.mood-badge:hover {
+  transform: translateY(-1px) scale(1.02);
+  box-shadow: 0 10px 25px rgba(15, 23, 42, 0.16);
+  animation: pulse-soft 1.4s ease-out infinite;
+}
+
+/* Inputs / text areas ------------------------------------------------------- */
+
+textarea,
+input[type="text"],
+input[type="search"],
+input[type="email"],
+input[type="password"] {
+  border-radius: 10px !important;
+  border: 1px solid rgba(44, 62, 80, 0.18) !important;
+  background-color: rgba(255, 255, 255, 0.9) !important;
+  padding: 0.6rem 0.9rem !important;
+  font-family: var(--font-body) !important;
+  transition:
+    border-color var(--transition-fast),
+    box-shadow var(--transition-fast),
+    background-color var(--transition-fast);
+}
+
+textarea:focus,
+input[type="text"]:focus,
+input[type="search"]:focus,
+input[type="email"]:focus,
+input[type="password"]:focus {
+  outline: none !important;
+  border-color: rgba(255, 153, 204, 0.9) !important;
+  box-shadow: 0 0 0 2px rgba(255, 229, 229, 0.9) !important;
+  background-color: #ffffff !important;
+}
+
+::placeholder {
+  color: rgba(44, 62, 80, 0.4) !important;
+  font-style: italic;
+}
+
+/* Streamlit buttons --------------------------------------------------------- */
+
+button[kind="primary"],
+.stButton > button {
+  border-radius: var(--radius-pill) !important;
+  border: none !important;
+  background: linear-gradient(135deg, var(--color-primary), #ffd6f0) !important;
+  color: #5a2a42 !important;
+  font-weight: 600 !important;
+  padding: 0.55rem 1.4rem !important;
+  box-shadow: 0 10px 25px rgba(255, 182, 193, 0.5) !important;
+  transition:
+    transform var(--transition-default),
+    box-shadow var(--transition-default),
+    filter var(--transition-default);
+}
+
+.stButton > button:hover {
+  transform: translateY(-1px) scale(1.02);
+  box-shadow: 0 14px 35px rgba(255, 182, 193, 0.7) !important;
+  filter: brightness(1.03);
+}
+
+.stButton > button:active {
+  transform: translateY(0) scale(0.98);
+  box-shadow: 0 6px 18px rgba(255, 182, 193, 0.5) !important;
+}
+
+/* Secondary / subtle buttons can be styled via an extra class in Streamlit */
+.pill-button {
+  border-radius: var(--radius-pill);
+  border: 1px solid rgba(44, 62, 80, 0.12);
+  background: linear-gradient(135deg, #ffffff, var(--color-secondary));
+  color: var(--color-text);
+  padding: 0.4rem 1rem;
+  font-size: 0.9rem;
+  box-shadow: 0 6px 18px rgba(15, 23, 42, 0.08);
+  cursor: pointer;
+  transition:
+    transform var(--transition-default),
+    box-shadow var(--transition-default),
+    background var(--transition-default);
+}
+
+.pill-button:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 10px 25px rgba(15, 23, 42, 0.12);
+}
+
+/* Custom scrollbar ---------------------------------------------------------- */
+
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(44, 62, 80, 0.25);
+  border-radius: 999px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(44, 62, 80, 0.4);
+}
+
+/* Animations ---------------------------------------------------------------- */
+
+@keyframes card-fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes pulse-soft {
+  0% {
+    box-shadow: 0 0 0 0 rgba(255, 182, 193, 0.55);
+  }
+  70% {
+    box-shadow: 0 0 0 10px rgba(255, 182, 193, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(255, 182, 193, 0);
+  }
+}
